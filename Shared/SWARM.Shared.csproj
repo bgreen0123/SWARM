@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Telerik.DataSource" Version="2.1.1" />
+    <PackageReference Include="Telerik.DataSource.Trial" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>

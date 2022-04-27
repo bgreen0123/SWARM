@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SWARM.Server.Data;
 using SWARM.Shared;
 
 namespace SWARM.Server.Controllers
@@ -20,9 +21,11 @@ namespace SWARM.Server.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ApplicationDbContext context, ILogger<WeatherForecastController> logger)
         {
+            _context = context;
             _logger = logger;
         }
 
