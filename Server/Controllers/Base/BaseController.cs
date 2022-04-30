@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SWARM.Server.Controllers
 {
-    [ApiController,Authorize,Route("api/[controller]")]
+    [ApiController,Route("api/[controller]")]
     public class BaseController<T> : Controller
     {
         protected readonly SWARMOracleContext _context;

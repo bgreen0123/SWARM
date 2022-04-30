@@ -30,7 +30,7 @@ namespace SWARM.Server.Application.Enroll
 
 
         [HttpGet]
-        [Route("GetEnrollment")]
+        [Route("Get")]
         public async Task<IActionResult> Get()
         {
             List<Enrollment> itmEnrollment = await _context.Enrollments.ToListAsync();
@@ -38,17 +38,39 @@ namespace SWARM.Server.Application.Enroll
         }
 
         [HttpGet]
-        [Route("GetEnrollment/{pStudentId}/{pSectionId}")]
-        public Task<IActionResult> Get(int pItemId)
+        [Route("Get/{KeyValue}")]
+        public Task<IActionResult> Get(int pKeyValue)
+        {
+            throw new NotImplementedException("Need more information");
+        }
+
+        [HttpGet]
+        [Route("Get/{pStudentId}/{SectionId}")]
+        public async Task<IActionResult> Get(int pStudentId, int pSectionId)
+        {
+            Enrollment itmEnrollment = await _context.Enrollments
+                            .Where(x => x.StudentId == pStudentId && x.SectionId == pSectionId).FirstOrDefaultAsync();
+            return Ok(itmEnrollment);
+        }
+
+
+
+        [HttpDelete]
+        [Route("Delete/{KeyValue}")]
+        Task<IActionResult> IBaseController<Enrollment>.Delete(int itemID)
         {
             throw new NotImplementedException();
         }
 
         [HttpDelete]
-        [Route("Delete/{Input}")]
-        public Task<IActionResult> Delete(int pItemId)
+        [Route("Delete/{StudentId}/{SectionId}")]
+        public async Task<IActionResult> Delete(int pStudentId, int pSectionId)
         {
-            throw new NotImplementedException();
+            Enrollment itmEnrollment = await _context.Enrollments
+                .Where(x => x.StudentId == pStudentId && x.SectionId == pSectionId).FirstOrDefaultAsync();
+            _context.Remove(itmEnrollment);
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
         [HttpPut]

@@ -37,7 +37,7 @@ namespace SWARM.Server.Application.Stu
         }
 
         [HttpGet]
-        [Route("{KeyValue")]
+        [Route("{KeyValue}")]
         Task<IActionResult> IBaseController<Student>.Get(int itemID)
         {
             throw new NotImplementedException();

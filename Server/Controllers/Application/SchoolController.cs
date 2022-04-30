@@ -37,13 +37,6 @@ namespace SWARM.Server.Application.S
         }
 
         [HttpGet]
-        [Route("{KeyValue")]
-        Task<IActionResult> IBaseController<School>.Get(int itemID)
-        {
-            throw new NotImplementedException();
-        }
-
-        [HttpGet]
         [Route("Get/{SchoolId}")]
         public async Task<IActionResult> Get(int pSchoolId)
         {

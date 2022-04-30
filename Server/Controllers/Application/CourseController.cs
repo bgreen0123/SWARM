@@ -38,7 +38,7 @@ namespace SWARM.Server.Application.Crse
         }
 
         [HttpGet]
-        [Route("GetCourse/{KeyValue}")]
+        [Route("GetCourse/{KeyValue}/")]
         public async Task<IActionResult> Get(int KeyValue)
         {
             Course itmCourse = await _context.Courses.Where(x => x.CourseNo == KeyValue).FirstOrDefaultAsync();
@@ -80,7 +80,7 @@ namespace SWARM.Server.Application.Crse
                 await _context.SaveChangesAsync();
                 trans.Commit();
 
-                return Ok(_Course.CourseNo);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -114,7 +114,7 @@ namespace SWARM.Server.Application.Crse
                 await _context.SaveChangesAsync();
                 trans.Commit();
 
-                return Ok(_Course.CourseNo);
+                return Ok(_Crse);
             }
             catch (Exception ex)
             {

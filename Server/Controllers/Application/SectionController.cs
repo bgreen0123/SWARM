@@ -44,7 +44,7 @@ namespace SWARM.Server.Application.Sec
         }
 
         [HttpDelete]
-        [Route("Delete/{pSectionNo")]
+        [Route("Delete/{pSectionNo}")]
         public async Task<IActionResult> Delete(int pSectionNo)
         {
             Section itmSection = await _context.Sections.Where(x => x.SectionNo == pSectionNo).FirstOrDefaultAsync();

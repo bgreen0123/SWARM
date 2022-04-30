@@ -37,7 +37,7 @@ namespace SWARM.Server.Application.GrdConvert
         }
 
         [HttpGet]
-        [Route("{KeyValue")]
+        [Route("{KeyValue}")]
         Task<IActionResult> IBaseController<GradeConversion>.Get(int itemID)
         {
             throw new NotImplementedException();
@@ -53,7 +53,7 @@ namespace SWARM.Server.Application.GrdConvert
         }
 
         [HttpDelete]
-        [Route("{KeyValue")]
+        [Route("{KeyValue}")]
         Task<IActionResult> IBaseController<GradeConversion>.Delete(int itemID)
         {
             throw new NotImplementedException();

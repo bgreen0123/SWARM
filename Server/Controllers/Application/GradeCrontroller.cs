@@ -38,7 +38,7 @@ namespace SWARM.Server.Application.Grd
         }
 
         [HttpGet]
-        [Route("{KeyValue")]
+        [Route("{KeyValue}")]
         Task<IActionResult> IBaseController<Grade>.Get(int itemID)
         {
             throw new NotImplementedException();
@@ -54,7 +54,7 @@ namespace SWARM.Server.Application.Grd
         }
 
         [HttpDelete]
-        [Route("{KeyValue")]
+        [Route("{KeyValue}")]
         Task<IActionResult> IBaseController<Grade>.Delete(int itemID)
         {
             throw new NotImplementedException();

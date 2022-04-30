@@ -37,7 +37,7 @@ namespace SWARM.Server.Application.Zip
         }
 
         [HttpGet]
-        [Route("{KeyValue")]
+        [Route("{KeyValue}")]
         Task<IActionResult> IBaseController<Zipcode>.Get(int itemID)
         {
             throw new NotImplementedException();
