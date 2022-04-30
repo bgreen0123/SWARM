@@ -70,7 +70,6 @@ namespace SWARM.Server.Application.Sec
                 else
                     bExists = true;
 
-                _Sec.SectionId = _Section.SectionId;
                 _Sec.CourseNo = _Section.CourseNo;
                 _Sec.SectionNo = _Section.SectionNo;
                 _Sec.StartDateTime = _Section.StartDateTime;

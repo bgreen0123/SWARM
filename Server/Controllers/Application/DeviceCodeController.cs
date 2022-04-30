@@ -29,26 +29,26 @@ namespace SWARM.Server.Application.DvCode
         }
 
         [HttpGet]
-        [Route("GetDeciveCode")]
+        [Route("Get")]
         public async Task<IActionResult> Get()
         {
-            List<DeviceCode> itmDeviceCode = await _context.DeviceCodes.ToListAsync();
-            return Ok(itmDeviceCode);
+            List<DeviceCode> lstDeviceCode = await _context.DeviceCodes.ToListAsync();
+            return Ok(lstDeviceCode);
         }
 
         [HttpGet]
-        [Route("GetDeviceCode/{pUserCode}")]
-        public async Task<IActionResult> Get(int pUserCode)
+        [Route("GetDeviceCode/{KeyValue}")]
+        public async Task<IActionResult> Get(int KeyValue)
         {
-            DeviceCode itmDeviceCode = await _context.DeviceCodes.Where(x => x.UserCode == pUserCode.ToString()).FirstOrDefaultAsync();
+            DeviceCode itmDeviceCode = await _context.DeviceCodes.Where(x => x.UserCode == KeyValue.ToString()).FirstOrDefaultAsync();
             return Ok(itmDeviceCode);
         }
 
         [HttpDelete]
-        [Route("Delete/{pUserCode}")]
-        public async Task<IActionResult> Delete(int pUserCode)
+        [Route("Delete/{KeyValue}")]
+        public async Task<IActionResult> Delete(int KeyValue)
         {
-            DeviceCode itmDeviceCode = await _context.DeviceCodes.Where(x => x.UserCode == pUserCode.ToString()).FirstOrDefaultAsync();
+            DeviceCode itmDeviceCode = await _context.DeviceCodes.Where(x => x.UserCode == KeyValue.ToString()).FirstOrDefaultAsync();
             _context.Remove(itmDeviceCode);
             await _context.SaveChangesAsync();
             return Ok();
@@ -57,8 +57,6 @@ namespace SWARM.Server.Application.DvCode
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] DeviceCode _DeviceCode)
         {
-            bool bExists = false;
-
             var trans = _context.Database.BeginTransaction();
             try
             {
@@ -66,30 +64,26 @@ namespace SWARM.Server.Application.DvCode
 
                 if (_DvCd == null)
                 {
-                    bExists = false;
-                    _DvCd = new DeviceCode();
+                    await Post(_DeviceCode);
+                    return Ok();
                 }
-                else
-                    bExists = true;
 
-                _DvCd.UserCode = _DeviceCode.UserCode;
-                _DvCd.DeviceCode1 = _DeviceCode.DeviceCode1;
-                _DvCd.SubjectId = _DeviceCode.SubjectId;
-                _DvCd.SessionId = _DeviceCode.SessionId;
-                _DvCd.ClientId = _DeviceCode.ClientId;
-                _DvCd.Description = _DeviceCode.Description;
-                _DvCd.CreationTime = _DeviceCode.CreationTime;
-                _DvCd.Expiration = _DeviceCode.Expiration;
-                _DvCd.Data = _DeviceCode.Data;
-                _context.Update(_DeviceCode);
-                await _context.SaveChangesAsync();
-
-                if (bExists)
+                _DvCd = new DeviceCode
                 {
-                    _context.DeviceCodes.Update(_DeviceCode);
-                }
-                else
-                    _context.DeviceCodes.Add(_DeviceCode);
+                    UserCode = _DeviceCode.UserCode,
+                    DeviceCode1 = _DeviceCode.DeviceCode1,
+                    SubjectId = _DeviceCode.SubjectId,
+                    SessionId = _DeviceCode.SessionId,
+                    ClientId = _DeviceCode.ClientId,
+                    Description = _DeviceCode.Description,
+                    CreationTime = _DeviceCode.CreationTime,
+                    Expiration = _DeviceCode.Expiration,
+                    Data = _DeviceCode.Data
+                };
+                _context.Update(_DeviceCode);
+                
+                await _context.SaveChangesAsync();
+                _context.DeviceCodes.Add(_DeviceCode);
 
                 trans.Commit();
 
@@ -115,16 +109,18 @@ namespace SWARM.Server.Application.DvCode
                     return StatusCode(StatusCodes.Status500InternalServerError, "Record Exists");
                 }
 
-                _DvCd = new DeviceCode();
-                _DvCd.UserCode = _DeviceCode.UserCode;
-                _DvCd.DeviceCode1 = _DeviceCode.DeviceCode1;
-                _DvCd.SubjectId = _DeviceCode.SubjectId;
-                _DvCd.SessionId = _DeviceCode.SessionId;
-                _DvCd.ClientId = _DeviceCode.ClientId;
-                _DvCd.Description = _DeviceCode.Description;
-                _DvCd.CreationTime = _DeviceCode.CreationTime;
-                _DvCd.Expiration = _DeviceCode.Expiration;
-                _DvCd.Data = _DeviceCode.Data;
+                _DvCd = new DeviceCode
+                {
+                    UserCode = _DeviceCode.UserCode,
+                    DeviceCode1 = _DeviceCode.DeviceCode1,
+                    SubjectId = _DeviceCode.SubjectId,
+                    SessionId = _DeviceCode.SessionId,
+                    ClientId = _DeviceCode.ClientId,
+                    Description = _DeviceCode.Description,
+                    CreationTime = _DeviceCode.CreationTime,
+                    Expiration = _DeviceCode.Expiration,
+                    Data = _DeviceCode.Data
+                };
                 _context.Update(_DeviceCode);
                 await _context.SaveChangesAsync();
                 _context.DeviceCodes.Add(_DvCd);

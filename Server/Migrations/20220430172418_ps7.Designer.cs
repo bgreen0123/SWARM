@@ -10,7 +10,7 @@ using SWARM.Server.Data;
 namespace SWARM.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220427023946_ps7")]
+    [Migration("20220430172418_ps7")]
     partial class ps7
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
