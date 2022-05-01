@@ -45,11 +45,11 @@ namespace SWARM.Server.Application.Grd
         }
 
         [HttpGet]
-        [Route("Get/{SchoolId}/{StudentId}/{SectionId}/{GradeTypeCode}")]
-        public async Task<IActionResult> Get(int pSchoolId, int pStudentId, int pSectionId, int pGradeTypeCode)
+        [Route("Get/{pSchoolId}/{pStudentId}/{pSectionId}/{pGradeTypeCode}")]
+        public async Task<IActionResult> Get(int pSchoolId, int pStudentId, int pSectionId, string pGradeTypeCode)
         {
             Grade itmGrade = await _context.Grades
-                .Where(x => x.SchoolId == pSchoolId && x.StudentId == pStudentId && x.SectionId == pSectionId && x.GradeTypeCode == pGradeTypeCode.ToString()).FirstOrDefaultAsync();
+                .Where(x => x.SchoolId == pSchoolId && x.StudentId == pStudentId && x.SectionId == pSectionId && x.GradeTypeCode.ToString() == pGradeTypeCode).FirstOrDefaultAsync();
             return Ok(itmGrade);
         }
 
@@ -61,7 +61,7 @@ namespace SWARM.Server.Application.Grd
         }
 
         [HttpDelete]
-        [Route("Delete/{SchoolId}/{StudentId}/{SectionId}/{GradeTypeCode}")]
+        [Route("Delete/{pSchoolId}/{pStudentId}/{pSectionId}/{pGradeTypeCode}")]
         public async Task<IActionResult> Delete(int pSchoolId, int pStudentId, int pSectionId, string pGradeTypeCode)
         {
             Grade itmGrade = await _context.Grades

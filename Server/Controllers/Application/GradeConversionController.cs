@@ -38,13 +38,13 @@ namespace SWARM.Server.Application.GrdConvert
 
         [HttpGet]
         [Route("{KeyValue}")]
-        Task<IActionResult> IBaseController<GradeConversion>.Get(int itemID)
+        Task<IActionResult> IBaseController<GradeConversion>.Get(int KeyValue)
         {
             throw new NotImplementedException();
         }
 
         [HttpGet]
-        [Route("Get/{SchoolId}/{LetterGrade}")]
+        [Route("Get/{pSchoolId}/{pLetterGrade}")]
         public async Task<IActionResult> Get(int pSchoolId, int pLetterGrade)
         {
             GradeConversion itmGradeConversion = await _context.GradeConversions
@@ -60,7 +60,7 @@ namespace SWARM.Server.Application.GrdConvert
         }
 
         [HttpDelete]
-        [Route("Delete/{SchoolId}/{LetterGrade}")]
+        [Route("Delete/{pSchoolId}/{pLetterGrade}")]
         public async Task<IActionResult> Delete(int pSchoolId, int pLetterGrade)
         {
             GradeConversion itmGradeCOnversion = await _context.GradeConversions

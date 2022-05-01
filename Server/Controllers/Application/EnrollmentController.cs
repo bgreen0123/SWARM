@@ -45,7 +45,7 @@ namespace SWARM.Server.Application.Enroll
         }
 
         [HttpGet]
-        [Route("Get/{pStudentId}/{SectionId}")]
+        [Route("Get/{pStudentId}/{pSectionId}")]
         public async Task<IActionResult> Get(int pStudentId, int pSectionId)
         {
             Enrollment itmEnrollment = await _context.Enrollments

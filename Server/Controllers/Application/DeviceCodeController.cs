@@ -37,18 +37,18 @@ namespace SWARM.Server.Application.DvCode
         }
 
         [HttpGet]
-        [Route("GetDeviceCode/{KeyValue}")]
-        public async Task<IActionResult> Get(int KeyValue)
+        [Route("Get/{pUserCode}")]
+        public async Task<IActionResult> Get(int pUserCode)
         {
-            DeviceCode itmDeviceCode = await _context.DeviceCodes.Where(x => x.UserCode == KeyValue.ToString()).FirstOrDefaultAsync();
+            DeviceCode itmDeviceCode = await _context.DeviceCodes.Where(x => x.UserCode == pUserCode.ToString()).FirstOrDefaultAsync();
             return Ok(itmDeviceCode);
         }
 
         [HttpDelete]
-        [Route("Delete/{KeyValue}")]
-        public async Task<IActionResult> Delete(int KeyValue)
+        [Route("Delete/{pUserCode}")]
+        public async Task<IActionResult> Delete(int pUserCode)
         {
-            DeviceCode itmDeviceCode = await _context.DeviceCodes.Where(x => x.UserCode == KeyValue.ToString()).FirstOrDefaultAsync();
+            DeviceCode itmDeviceCode = await _context.DeviceCodes.Where(x => x.UserCode == pUserCode.ToString()).FirstOrDefaultAsync();
             _context.Remove(itmDeviceCode);
             await _context.SaveChangesAsync();
             return Ok();

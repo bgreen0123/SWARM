@@ -28,7 +28,7 @@ namespace SWARM.Server.Application.Sec
         }
 
         [HttpGet]
-        [Route("GetSection")]
+        [Route("Get")]
         public async Task<IActionResult> Get()
         {
             List<Section> itmSection = await _context.Sections.ToListAsync();
@@ -36,7 +36,7 @@ namespace SWARM.Server.Application.Sec
         }
 
         [HttpGet]
-        [Route("GetSection/{pSectionNo}")]
+        [Route("Get/{pSectionNo}")]
         public async Task<IActionResult> Get(int pSectionNo)
         {
             Section itmSection = await _context.Sections.Where(x => x.SectionNo == pSectionNo).FirstOrDefaultAsync();

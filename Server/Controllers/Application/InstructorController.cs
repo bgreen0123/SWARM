@@ -37,14 +37,14 @@ namespace SWARM.Server.Application.Instruct
         }
 
         [HttpGet]
-        [Route("{KeyValue}")]
-        Task<IActionResult> IBaseController<Instructor>.Get(int itemID)
+        [Route("Get/{KeyValue}")]
+        Task<IActionResult> IBaseController<Instructor>.Get(int KeyValue)
         {
             throw new NotImplementedException();
         }
 
         [HttpGet]
-        [Route("Get/{SchoolId}/{InstructorId}")]
+        [Route("Get/{pSchoolId}/{pInstructorId}")]
         public async Task<IActionResult> Get(int pSchoolId, int InstructorId)
         {
             Instructor itmInstructor = await _context.Instructors
@@ -53,14 +53,14 @@ namespace SWARM.Server.Application.Instruct
         }
 
         [HttpDelete]
-        [Route("{KeyValue}")]
-        Task<IActionResult> IBaseController<Instructor>.Delete(int itemID)
+        [Route("Delete/{KeyValue}")]
+        Task<IActionResult> IBaseController<Instructor>.Delete(int KeyValue)
         {
             throw new NotImplementedException();
         }
 
         [HttpDelete]
-        [Route("Delete/{SchoolId}/{InstructorId}")]
+        [Route("Delete/{pSchoolId}/{pInstructorId}")]
         public async Task<IActionResult> Delete(int pSchoolId, int pInstructor)
         {
             Instructor itmInstructor = await _context.Instructors

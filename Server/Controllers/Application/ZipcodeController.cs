@@ -38,13 +38,13 @@ namespace SWARM.Server.Application.Zip
 
         [HttpGet]
         [Route("{KeyValue}")]
-        Task<IActionResult> IBaseController<Zipcode>.Get(int itemID)
+        Task<IActionResult> IBaseController<Zipcode>.Get(int KeyValue)
         {
             throw new NotImplementedException();
         }
 
         [HttpGet]
-        [Route("Get/{Zip}")]
+        [Route("Get/{pZip}")]
         public async Task<IActionResult> Get(int pZip)
         {
             Zipcode itmZip = await _context.Zipcodes
@@ -54,13 +54,13 @@ namespace SWARM.Server.Application.Zip
 
         [HttpDelete]
         [Route("{KeyValue}")]
-        Task<IActionResult> IBaseController<Zipcode>.Delete(int itemID)
+        Task<IActionResult> IBaseController<Zipcode>.Delete(int KeyValue)
         {
             throw new NotImplementedException();
         }
 
         [HttpDelete]
-        [Route("Delete/{Zip}")]
+        [Route("Delete/{pZip}")]
         public async Task<IActionResult> Delete(int pZip)
         {
             Zipcode itmZip = await _context.Zipcodes

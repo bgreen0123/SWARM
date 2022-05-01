@@ -38,13 +38,13 @@ namespace SWARM.Server.Application.GrdType
 
         [HttpGet]
         [Route("{KeyValue}")]
-        Task<IActionResult> IBaseController<GradeTypeWeight>.Get(int itemID)
+        Task<IActionResult> IBaseController<GradeTypeWeight>.Get(int KeyValue)
         {
             throw new NotImplementedException();
         }
 
         [HttpGet]
-        [Route("Get/{SchoolId}/{SectionId}/{GradeTypeCode}")]
+        [Route("Get/{pSchoolId}/{pSectionId}/{pGradeTypeCode}")]
         public async Task<IActionResult> Get(int pSchoolId, int pSectionId, int pGradeTypeCode)
         {
             GradeTypeWeight itmGradeTypeCodeWeight = await _context.GradeTypeWeights
@@ -54,13 +54,13 @@ namespace SWARM.Server.Application.GrdType
 
         [HttpDelete]
         [Route("{KeyValue}")]
-        Task<IActionResult> IBaseController<GradeTypeWeight>.Delete(int itemID)
+        Task<IActionResult> IBaseController<GradeTypeWeight>.Delete(int KeyValue)
         {
             throw new NotImplementedException();
         }
 
         [HttpDelete]
-        [Route("Delete/{SchoolId}/{SectionId}/{GradeTypeCode}")]
+        [Route("Delete/{pSchoolId}/{pSectionId}/{pGradeTypeCode}")]
         public async Task<IActionResult> Delete(int pSchoolId, int pSectionId, int pGradeTypeCode)
         {
             GradeTypeWeight itmGradeTypeCodeWeight = await _context.GradeTypeWeights

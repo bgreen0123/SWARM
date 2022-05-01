@@ -38,18 +38,18 @@ namespace SWARM.Server.Application.Crse
         }
 
         [HttpGet]
-        [Route("GetCourse/{KeyValue}/")]
-        public async Task<IActionResult> Get(int KeyValue)
+        [Route("Get/{pCourseNo}")]
+        public async Task<IActionResult> Get(int pCourseNo)
         {
-            Course itmCourse = await _context.Courses.Where(x => x.CourseNo == KeyValue).FirstOrDefaultAsync();
+            Course itmCourse = await _context.Courses.Where(x => x.CourseNo == pCourseNo).FirstOrDefaultAsync();
             return Ok(itmCourse);
         }
 
         [HttpDelete]
-        [Route("Delete/{KeyValue}")]
-        public async Task<IActionResult> Delete(int KeyValue)
+        [Route("Delete/{pCourseNo}")]
+        public async Task<IActionResult> Delete(int pCourseNo)
         {
-            Course itmCourse = await _context.Courses.Where(x => x.CourseNo == KeyValue).FirstOrDefaultAsync();
+            Course itmCourse = await _context.Courses.Where(x => x.CourseNo == pCourseNo).FirstOrDefaultAsync();
             _context.Remove(itmCourse);
             await _context.SaveChangesAsync();
             return Ok();
@@ -63,7 +63,7 @@ namespace SWARM.Server.Application.Crse
             {
                 var _Crse = await _context.Courses.Where(x => x.CourseNo == _Course.CourseNo).FirstOrDefaultAsync();
 
-                if (_Crse == null)
+                if (_Crse != null)
                 {
                     await Post(_Course);
                     return Ok();
