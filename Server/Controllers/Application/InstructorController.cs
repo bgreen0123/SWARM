@@ -73,19 +73,18 @@ namespace SWARM.Server.Application.Instruct
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Instructor _Instructor)
         {
+            var _Instruct = await _context.Instructors
+                .Where(x => x.SchoolId == _Instructor.SchoolId && x.InstructorId == _Instructor.InstructorId).FirstOrDefaultAsync();
+
+            if (_Instruct == null)
+            {
+                await Post(_Instructor);
+                return Ok();
+            }
+
             var trans = _context.Database.BeginTransaction();
             try
             {
-                var _Instruct = await _context.Instructors
-                    .Where(x => x.SchoolId == _Instructor.SchoolId && x.InstructorId == _Instructor.InstructorId).FirstOrDefaultAsync();
-
-                if (_Instruct == null)
-                {
-                    await Post(_Instructor);
-                    return Ok();
-                }
-
-
                 _Instruct.SchoolId = _Instructor.SchoolId;
                 _Instruct.InstructorId = _Instructor.InstructorId;
                 _Instruct.Salutation = _Instructor.Salutation;
@@ -124,15 +123,17 @@ namespace SWARM.Server.Application.Instruct
                     return StatusCode(StatusCodes.Status500InternalServerError, "Record Exists");
                 }
 
-                _Instruct = new Instructor();
-                _Instruct.SchoolId = _Instructor.SchoolId;
-                _Instruct.InstructorId = _Instructor.InstructorId;
-                _Instruct.Salutation = _Instructor.Salutation;
-                _Instruct.FirstName = _Instructor.FirstName;
-                _Instruct.LastName = _Instructor.LastName;
-                _Instruct.StreetAddress = _Instructor.StreetAddress;
-                _Instruct.Zip = _Instructor.Zip;
-                _Instruct.Phone = _Instructor.Phone;
+                _Instruct = new Instructor
+                {
+                    SchoolId = _Instructor.SchoolId,
+                    InstructorId = _Instructor.InstructorId,
+                    Salutation = _Instructor.Salutation,
+                    FirstName = _Instructor.FirstName,
+                    LastName = _Instructor.LastName,
+                    StreetAddress = _Instructor.StreetAddress,
+                    Zip = _Instructor.Zip,
+                    Phone = _Instructor.Phone
+                };
                 _Instruct.StreetAddress = _Instructor.StreetAddress;
                 _Instruct.StreetAddress = _Instructor.StreetAddress;
 

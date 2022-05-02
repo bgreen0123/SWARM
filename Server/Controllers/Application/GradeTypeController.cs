@@ -73,19 +73,18 @@ namespace SWARM.Server.Application.GrdType
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] GradeType _GradeType)
         {
+            var _GrdType = await _context.GradeTypes
+                .Where(x => x.SchoolId == _GradeType.SchoolId && x.GradeTypeCode == _GradeType.GradeTypeCode).FirstOrDefaultAsync();
+
+            if (_GrdType == null)
+            {
+                await Post(_GradeType);
+                return Ok();
+            }
+
             var trans = _context.Database.BeginTransaction();
             try
             {
-                var _GrdType = await _context.GradeTypes
-                    .Where(x => x.SchoolId == _GradeType.SchoolId && x.GradeTypeCode == _GradeType.GradeTypeCode).FirstOrDefaultAsync();
-
-                if (_GrdType == null)
-                {
-                    await Post(_GradeType);
-                    return Ok();
-                }
-
-
                 _GrdType.SchoolId = _GradeType.SchoolId;
                 _GrdType.GradeTypeCode = _GradeType.GradeTypeCode;
                 _GrdType.Description = _GradeType.Description;

@@ -73,19 +73,18 @@ namespace SWARM.Server.Application.GrdConvert
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] GradeConversion _GradeConversion)
         {
+            var _GrdConvert = await _context.GradeConversions
+                .Where(x => x.SchoolId == _GradeConversion.SchoolId && x.LetterGrade == _GradeConversion.LetterGrade).FirstOrDefaultAsync();
+
+            if (_GrdConvert == null)
+            {
+                await Post(_GradeConversion);
+                return Ok();
+            }
+
             var trans = _context.Database.BeginTransaction();
             try
             {
-                var _GrdConvert = await _context.GradeConversions
-                    .Where(x => x.SchoolId == _GradeConversion.SchoolId && x.LetterGrade == _GradeConversion.LetterGrade).FirstOrDefaultAsync();
-
-                if (_GrdConvert == null)
-                {
-                    await Post(_GradeConversion);
-                    return Ok();
-                }
-
-
                 _GrdConvert.SchoolId = _GradeConversion.SchoolId;
                 _GrdConvert.LetterGrade = _GradeConversion.LetterGrade;
                 _GrdConvert.GradePoint = _GradeConversion.GradePoint;

@@ -57,34 +57,28 @@ namespace SWARM.Server.Application.DvCode
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] DeviceCode _DeviceCode)
         {
+            var _DvCd = await _context.DeviceCodes.Where(x => x.UserCode == _DeviceCode.UserCode).FirstOrDefaultAsync();
+
+            if (_DvCd == null)
+            {
+                await Post(_DeviceCode);
+                return Ok();
+            }
             var trans = _context.Database.BeginTransaction();
             try
             {
-                var _DvCd = await _context.DeviceCodes.Where(x => x.UserCode == _DeviceCode.UserCode).FirstOrDefaultAsync();
+                _DvCd.UserCode = _DeviceCode.UserCode;
+                _DvCd.DeviceCode1 = _DeviceCode.DeviceCode1;
+                _DvCd.SubjectId = _DeviceCode.SubjectId;
+                _DvCd.SessionId = _DeviceCode.SessionId;
+                _DvCd.ClientId = _DeviceCode.ClientId;
+                _DvCd.Description = _DeviceCode.Description;
+                _DvCd.CreationTime = _DeviceCode.CreationTime;
+                _DvCd.Expiration = _DeviceCode.Expiration;
+                _DvCd.Data = _DeviceCode.Data;
 
-                if (_DvCd == null)
-                {
-                    await Post(_DeviceCode);
-                    return Ok();
-                }
-
-                _DvCd = new DeviceCode
-                {
-                    UserCode = _DeviceCode.UserCode,
-                    DeviceCode1 = _DeviceCode.DeviceCode1,
-                    SubjectId = _DeviceCode.SubjectId,
-                    SessionId = _DeviceCode.SessionId,
-                    ClientId = _DeviceCode.ClientId,
-                    Description = _DeviceCode.Description,
-                    CreationTime = _DeviceCode.CreationTime,
-                    Expiration = _DeviceCode.Expiration,
-                    Data = _DeviceCode.Data
-                };
                 _context.Update(_DeviceCode);
-                
                 await _context.SaveChangesAsync();
-                _context.DeviceCodes.Add(_DeviceCode);
-
                 trans.Commit();
 
                 return Ok(_DeviceCode.UserCode);
@@ -121,10 +115,8 @@ namespace SWARM.Server.Application.DvCode
                     Expiration = _DeviceCode.Expiration,
                     Data = _DeviceCode.Data
                 };
-                _context.Update(_DeviceCode);
                 await _context.SaveChangesAsync();
                 _context.DeviceCodes.Add(_DvCd);
-
                 trans.Commit();
 
                 return Ok(_DeviceCode.UserCode);

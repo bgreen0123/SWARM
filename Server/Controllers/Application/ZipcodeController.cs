@@ -73,19 +73,18 @@ namespace SWARM.Server.Application.Zip
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Zipcode _Zipcode)
         {
+            var _Zip = await _context.Zipcodes
+                .Where(x => x.Zip == _Zipcode.Zip).FirstOrDefaultAsync();
+
+            if (_Zip == null)
+            {
+                await Post(_Zipcode);
+                return Ok();
+            }
+
             var trans = _context.Database.BeginTransaction();
             try
             {
-                var _Zip = await _context.Zipcodes
-                    .Where(x => x.Zip == _Zipcode.Zip).FirstOrDefaultAsync();
-
-                if (_Zip == null)
-                {
-                    await Post(_Zipcode);
-                    return Ok();
-                }
-
-
                 _Zip.Zip = _Zipcode.Zip;
                 _Zip.City = _Zipcode.City;
                 _Zip.State = _Zipcode.State;
@@ -117,10 +116,12 @@ namespace SWARM.Server.Application.Zip
                     return StatusCode(StatusCodes.Status500InternalServerError, "Record Exists");
                 }
 
-                _Zip = new Zipcode();
-                _Zip.Zip = _Zipcode.Zip;
-                _Zip.City = _Zipcode.City;
-                _Zip.State = _Zipcode.State;
+                _Zip = new Zipcode
+                {
+                    Zip = _Zipcode.Zip,
+                    City = _Zipcode.City,
+                    State = _Zipcode.State
+                };
 
                 _context.Zipcodes.Add(_Zip);
                 await _context.SaveChangesAsync();

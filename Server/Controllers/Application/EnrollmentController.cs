@@ -76,25 +76,25 @@ namespace SWARM.Server.Application.Enroll
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Enrollment _Enrollment)
         {
+            var _Eroll = await _context.Enrollments.Where(x => x.StudentId == _Enrollment.StudentId && x.SectionId == _Enrollment.SectionId).FirstOrDefaultAsync();
+
+            if (_Eroll == null)
+            {
+                await Post(_Enrollment);
+                return Ok();
+            }
+            
             var trans = _context.Database.BeginTransaction();
+
             try
             {
-                var _Eroll = await _context.Enrollments.Where(x => x.StudentId == _Enrollment.StudentId && x.SectionId == _Enrollment.SectionId).FirstOrDefaultAsync();
-
-                if (_Eroll != null)
-                {
-                    await Post(_Enrollment);
-                    return Ok();
-                }
-
-                _Eroll = new Enrollment();
                 _Eroll.StudentId = _Enrollment.StudentId;
                 _Eroll.SectionId = _Enrollment.SectionId;
                 _Eroll.EnrollDate = _Enrollment.EnrollDate;
                 _Eroll.FinalGrade = _Enrollment.FinalGrade;
                 _Eroll.SchoolId = _Enrollment.SchoolId;
+                
                 _context.Update(_Eroll);
-
                 await _context.SaveChangesAsync();
                 trans.Commit();
 
@@ -120,15 +120,16 @@ namespace SWARM.Server.Application.Enroll
                     return StatusCode(StatusCodes.Status500InternalServerError, "Record Exists");
                 }
 
-                _Eroll = new Enrollment();
-                _Eroll.StudentId = _Enrollment.StudentId;
-                _Eroll.SectionId = _Enrollment.SectionId;
-                _Eroll.EnrollDate = _Enrollment.EnrollDate;
-                _Eroll.FinalGrade = _Enrollment.FinalGrade;
-                _Eroll.SchoolId = _Enrollment.SchoolId;
+                _Eroll = new Enrollment
+                {
+                    StudentId = _Enrollment.StudentId,
+                    SectionId = _Enrollment.SectionId,
+                    EnrollDate = _Enrollment.EnrollDate,
+                    FinalGrade = _Enrollment.FinalGrade,
+                    SchoolId = _Enrollment.SchoolId
+                };
 
                 _context.Enrollments.Add(_Eroll);
-
                 await _context.SaveChangesAsync();
                 trans.Commit();
 

@@ -73,19 +73,18 @@ namespace SWARM.Server.Application.Stu
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Student _Student)
         {
+            var _Stu = await _context.Students
+                .Where(x => x.SchoolId == _Student.StudentId).FirstOrDefaultAsync();
+
+            if (_Stu == null)
+            {
+                await Post(_Student);
+                return Ok();
+            }
+
             var trans = _context.Database.BeginTransaction();
             try
             {
-                var _Stu = await _context.Students
-                    .Where(x => x.SchoolId == _Student.StudentId).FirstOrDefaultAsync();
-
-                if (_Stu == null)
-                {
-                    await Post(_Student);
-                    return Ok();
-                }
-
-
                 _Stu.StudentId = _Student.StudentId;
                 _Stu.Salutation = _Student.Salutation;
                 _Stu.FirstName = _Student.FirstName;
@@ -122,15 +121,17 @@ namespace SWARM.Server.Application.Stu
                     return StatusCode(StatusCodes.Status500InternalServerError, "Record Exists");
                 }
 
-                _Stu = new Student();
-                _Stu.StudentId = _Student.StudentId;
-                _Stu.Salutation = _Student.Salutation;
-                _Stu.FirstName = _Student.FirstName;
-                _Stu.StreetAddress = _Student.StreetAddress;
-                _Stu.Zip = _Student.Zip;
-                _Stu.Phone = _Student.Phone;
-                _Stu.Employer = _Student.Employer;
-                _Stu.RegistrationDate = _Student.RegistrationDate;
+                _Stu = new Student
+                {
+                    StudentId = _Student.StudentId,
+                    Salutation = _Student.Salutation,
+                    FirstName = _Student.FirstName,
+                    StreetAddress = _Student.StreetAddress,
+                    Zip = _Student.Zip,
+                    Phone = _Student.Phone,
+                    Employer = _Student.Employer,
+                    RegistrationDate = _Student.RegistrationDate
+                };
 
                 _context.Students.Add(_Stu);
                 await _context.SaveChangesAsync();

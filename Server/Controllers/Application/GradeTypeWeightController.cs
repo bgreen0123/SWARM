@@ -73,19 +73,18 @@ namespace SWARM.Server.Application.GrdType
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] GradeTypeWeight _GradeTypeWeight)
         {
+            var _GrdTypeWeight = await _context.GradeTypeWeights
+                .Where(x => x.SchoolId == _GradeTypeWeight.SchoolId && x.SectionId == _GradeTypeWeight.SectionId && x.GradeTypeCode == _GradeTypeWeight.GradeTypeCode).FirstOrDefaultAsync();
+
+            if (_GrdTypeWeight == null)
+            {
+                await Post(_GradeTypeWeight);
+                return Ok();
+            }
+
             var trans = _context.Database.BeginTransaction();
             try
             {
-                var _GrdTypeWeight = await _context.GradeTypeWeights
-                    .Where(x => x.SchoolId == _GradeTypeWeight.SchoolId && x.SectionId == _GradeTypeWeight.SectionId && x.GradeTypeCode == _GradeTypeWeight.GradeTypeCode).FirstOrDefaultAsync();
-
-                if (_GrdTypeWeight == null)
-                {
-                    await Post(_GradeTypeWeight);
-                    return Ok();
-                }
-
-
                 _GrdTypeWeight.SchoolId = _GradeTypeWeight.SchoolId;
                 _GrdTypeWeight.SectionId = _GrdTypeWeight.SectionId;
                 _GrdTypeWeight.GradeTypeCode = _GradeTypeWeight.GradeTypeCode;

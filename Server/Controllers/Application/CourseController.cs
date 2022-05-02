@@ -50,6 +50,10 @@ namespace SWARM.Server.Application.Crse
         public async Task<IActionResult> Delete(int pCourseNo)
         {
             Course itmCourse = await _context.Courses.Where(x => x.CourseNo == pCourseNo).FirstOrDefaultAsync();
+            if (itmCourse == null)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, "Course does not exist");
+            }
             _context.Remove(itmCourse);
             await _context.SaveChangesAsync();
             return Ok();
@@ -58,25 +62,23 @@ namespace SWARM.Server.Application.Crse
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Course _Course)
         {
+            var _Crse = await _context.Courses.Where(x => x.CourseNo == _Course.CourseNo).FirstOrDefaultAsync();
+
+            if (_Crse == null)
+            {
+                await Post(_Course);
+                return Ok();
+            }
             var trans = _context.Database.BeginTransaction();
             try
             {
-                var _Crse = await _context.Courses.Where(x => x.CourseNo == _Course.CourseNo).FirstOrDefaultAsync();
-
-                if (_Crse != null)
-                {
-                    await Post(_Course);
-                    return Ok();
-                }
-
-                _Crse = new Course();
                 _Crse.Cost = _Course.Cost;
                 _Crse.Description = _Course.Description;
                 _Crse.Prerequisite = _Course.Prerequisite;
                 _Crse.PrerequisiteSchoolId = _Course.PrerequisiteSchoolId;
                 _Crse.SchoolId = _Course.SchoolId;
-                _context.Update(_Crse);
 
+                _context.Update(_Crse);
                 await _context.SaveChangesAsync();
                 trans.Commit();
 
@@ -102,15 +104,16 @@ namespace SWARM.Server.Application.Crse
                     return StatusCode(StatusCodes.Status500InternalServerError, "Record Exists");
                 }
 
-                _Crse = new Course();
-                _Crse.Cost = _Course.Cost;
-                _Crse.Description = _Course.Description;
-                _Crse.Prerequisite = _Course.Prerequisite;
-                _Crse.PrerequisiteSchoolId = _Course.PrerequisiteSchoolId;
-                _Crse.SchoolId = _Course.SchoolId;
+                _Crse = new Course
+                {
+                    Cost = _Course.Cost,
+                    Description = _Course.Description,
+                    Prerequisite = _Course.Prerequisite,
+                    PrerequisiteSchoolId = _Course.PrerequisiteSchoolId,
+                    SchoolId = _Course.SchoolId
+                };
 
                 _context.Courses.Add(_Crse);
-
                 await _context.SaveChangesAsync();
                 trans.Commit();
 

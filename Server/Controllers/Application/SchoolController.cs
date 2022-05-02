@@ -66,19 +66,18 @@ namespace SWARM.Server.Application.S
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] School _School)
         {
+            var _s = await _context.Schools
+                .Where(x => x.SchoolId == _School.SchoolId).FirstOrDefaultAsync();
+
+            if (_s == null)
+            {
+                await Post(_School);
+                return Ok();
+            }
+
             var trans = _context.Database.BeginTransaction();
             try
             {
-                var _s = await _context.Schools
-                    .Where(x => x.SchoolId == _School.SchoolId).FirstOrDefaultAsync();
-
-                if (_s == null)
-                {
-                    await Post(_School);
-                    return Ok();
-                }
-
-
                 _s.SchoolId = _School.SchoolId;
                 _s.SchoolName = _School.SchoolName;
 
@@ -109,9 +108,11 @@ namespace SWARM.Server.Application.S
                     return StatusCode(StatusCodes.Status500InternalServerError, "Record Exists");
                 }
 
-                _s = new School();
-                _s.SchoolId = _School.SchoolId;
-                _s.SchoolName = _School.SchoolName;
+                _s = new School
+                {
+                    SchoolId = _School.SchoolId,
+                    SchoolName = _School.SchoolName
+                };
 
                 _context.Schools.Add(_s);
                 await _context.SaveChangesAsync();

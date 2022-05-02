@@ -74,19 +74,18 @@ namespace SWARM.Server.Application.Grd
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Grade _Grade)
         {
+            var _Grd = await _context.Grades
+                .Where(x => x.SchoolId == _Grade.SchoolId && x.StudentId == _Grade.StudentId && x.SectionId == _Grade.SectionId && x.GradeTypeCode == _Grade.GradeTypeCode).FirstOrDefaultAsync();
+
+            if (_Grd == null)
+            {
+                await Post(_Grade);
+                return Ok();
+            }
+
             var trans = _context.Database.BeginTransaction();
             try
             {
-                var _Grd = await _context.Grades
-                    .Where(x => x.SchoolId == _Grade.SchoolId && x.StudentId == _Grade.StudentId && x.SectionId == _Grade.SectionId && x.GradeTypeCode == _Grade.GradeTypeCode).FirstOrDefaultAsync();
-
-                if (_Grd == null)
-                {
-                    await Post(_Grade);
-                    return Ok();
-                }
-
-
                 _Grd.SchoolId = _Grade.SchoolId;
                 _Grd.StudentId = _Grade.StudentId;
                 _Grd.SectionId = _Grade.SectionId;
@@ -122,14 +121,16 @@ namespace SWARM.Server.Application.Grd
                     return StatusCode(StatusCodes.Status500InternalServerError, "Record Exists");
                 }
 
-                _Grd = new Grade();
-                _Grd.SchoolId = _Grade.SchoolId;
-                _Grd.StudentId = _Grade.StudentId;
-                _Grd.SectionId = _Grade.SectionId;
-                _Grd.GradeTypeCode = _Grade.GradeTypeCode;
-                _Grd.GradeCodeOccurrence = _Grade.GradeCodeOccurrence;
-                _Grd.NumericGrade = _Grade.NumericGrade;
-                _Grd.Comments = _Grade.Comments;
+                _Grd = new Grade
+                {
+                    SchoolId = _Grade.SchoolId,
+                    StudentId = _Grade.StudentId,
+                    SectionId = _Grade.SectionId,
+                    GradeTypeCode = _Grade.GradeTypeCode,
+                    GradeCodeOccurrence = _Grade.GradeCodeOccurrence,
+                    NumericGrade = _Grade.NumericGrade,
+                    Comments = _Grade.Comments
+                };
 
                 _context.Grades.Add(_Grd);
                 await _context.SaveChangesAsync();

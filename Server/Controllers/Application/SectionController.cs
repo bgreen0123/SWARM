@@ -36,10 +36,10 @@ namespace SWARM.Server.Application.Sec
         }
 
         [HttpGet]
-        [Route("Get/{pSectionNo}")]
-        public async Task<IActionResult> Get(int pSectionNo)
+        [Route("Get/{pSectionId}")]
+        public async Task<IActionResult> Get(int pSectionId)
         {
-            Section itmSection = await _context.Sections.Where(x => x.SectionNo == pSectionNo).FirstOrDefaultAsync();
+            Section itmSection = await _context.Sections.Where(x => x.SectionId == pSectionId).FirstOrDefaultAsync();
             return Ok(itmSection);
         }
 
@@ -55,21 +55,17 @@ namespace SWARM.Server.Application.Sec
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Section _Section)
         {
-            bool bExists = false;
+            var _Sec = await _context.Sections.Where(x => x.SectionNo == _Section.SectionNo).FirstOrDefaultAsync();
+
+            if (_Sec == null)
+            {
+                await Post(_Section);
+                return Ok();
+            }
 
             var trans = _context.Database.BeginTransaction();
             try
             {
-                var _Sec = await _context.Sections.Where(x => x.SectionNo == _Section.SectionNo).FirstOrDefaultAsync();
-
-                if (_Sec == null)
-                {
-                    bExists = false;
-                    _Sec = new Section();
-                }
-                else
-                    bExists = true;
-
                 _Sec.CourseNo = _Section.CourseNo;
                 _Sec.SectionNo = _Section.SectionNo;
                 _Sec.StartDateTime = _Section.StartDateTime;
@@ -82,18 +78,12 @@ namespace SWARM.Server.Application.Sec
                 _Sec.School = _Section.School;
                 _Sec.Enrollments = _Section.Enrollments;
                 _Sec.GradeTypeWeights= _Section.GradeTypeWeights;
+                
                 _context.Update(_Sec);
                 await _context.SaveChangesAsync();
-                if (bExists)
-                {
-                    _context.Sections.Update(_Sec);
-                }
-                else
-                    _context.Sections.Add(_Sec);
-
                 trans.Commit();
 
-                return Ok(_Section.SectionNo);
+                return Ok("Done");
             }
             catch (Exception ex)
             {
@@ -108,34 +98,35 @@ namespace SWARM.Server.Application.Sec
             var trans = _context.Database.BeginTransaction();
             try
             {
-                var _Sec = await _context.Sections.Where(x => x.SectionNo == _Section.SectionNo).FirstOrDefaultAsync();
+                var _Sec = await _context.Sections.Where(x => x.SectionId == _Section.SectionId).FirstOrDefaultAsync();
 
-                if (_Sec == null)
+                if (_Sec != null)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError, "Record Exists");
                 }
 
-                _Sec = new Section();
-                _Sec.SectionId = _Section.SectionId;
-                _Sec.CourseNo = _Section.CourseNo;
-                _Sec.SectionNo = _Section.SectionNo;
-                _Sec.StartDateTime = _Section.StartDateTime;
-                _Sec.Location = _Section.Location;
-                _Sec.InstructorId = _Section.InstructorId;
-                _Sec.Capacity = _Section.Capacity;
-                _Sec.SchoolId = _Section.SchoolId;
-                _Sec.Course = _Section.Course;
-                _Sec.Instructor = _Section.Instructor;
-                _Sec.School = _Section.School;
-                _Sec.Enrollments = _Section.Enrollments;
-                _Sec.GradeTypeWeights = _Section.GradeTypeWeights;
-                _context.Update(_Sec);
-                await _context.SaveChangesAsync();
-                _context.Sections.Add(_Sec);
+                _Sec = new Section
+                {
+                    SectionId = _Section.SectionId,
+                    CourseNo = _Section.CourseNo,
+                    SectionNo = _Section.SectionNo,
+                    StartDateTime = _Section.StartDateTime,
+                    Location = _Section.Location,
+                    InstructorId = _Section.InstructorId,
+                    Capacity = _Section.Capacity,
+                    SchoolId = _Section.SchoolId,
+                    Course = _Section.Course,
+                    Instructor = _Section.Instructor,
+                    School = _Section.School,
+                    Enrollments = _Section.Enrollments,
+                    GradeTypeWeights = _Section.GradeTypeWeights
+                };
 
+                _context.Sections.Add(_Sec);
+                await _context.SaveChangesAsync();
                 trans.Commit();
 
-                return Ok(_Section.SectionNo);
+                return Ok(_Section);
             }
             catch (Exception ex)
             {
