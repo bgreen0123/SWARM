@@ -44,7 +44,7 @@ namespace SWARM.Server.Application.Stu
         }
 
         [HttpGet]
-        [Route("Get/{pSchoolId}")]
+        [Route("Get/{pStudentId}")]
         public async Task<IActionResult> Get(int pStudentId)
         {
             Student itmStudent = await _context.Students
