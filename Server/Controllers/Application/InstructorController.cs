@@ -45,10 +45,10 @@ namespace SWARM.Server.Application.Instruct
 
         [HttpGet]
         [Route("Get/{pSchoolId}/{pInstructorId}")]
-        public async Task<IActionResult> Get(int pSchoolId, int InstructorId)
+        public async Task<IActionResult> Get(int pSchoolId, int pInstructorId)
         {
             Instructor itmInstructor = await _context.Instructors
-                .Where(x => x.SchoolId == pSchoolId && x.InstructorId == InstructorId).FirstOrDefaultAsync();
+                .Where(x => x.SchoolId == pSchoolId && x.InstructorId == pInstructorId).FirstOrDefaultAsync();
             return Ok(itmInstructor);
         }
 
@@ -61,10 +61,10 @@ namespace SWARM.Server.Application.Instruct
 
         [HttpDelete]
         [Route("Delete/{pSchoolId}/{pInstructorId}")]
-        public async Task<IActionResult> Delete(int pSchoolId, int pInstructor)
+        public async Task<IActionResult> Delete(int pSchoolId, int pInstructorId)
         {
             Instructor itmInstructor = await _context.Instructors
-                .Where(x => x.SchoolId == pSchoolId && x.InstructorId == pInstructor).FirstOrDefaultAsync();
+                .Where(x => x.SchoolId == pSchoolId && x.InstructorId == pInstructorId).FirstOrDefaultAsync();
             _context.Remove(itmInstructor);
             await _context.SaveChangesAsync();
             return Ok();
@@ -93,7 +93,6 @@ namespace SWARM.Server.Application.Instruct
                 _Instruct.StreetAddress = _Instructor.StreetAddress;
                 _Instruct.Zip = _Instructor.Zip;
                 _Instruct.Phone = _Instructor.Phone;
-                _Instruct.StreetAddress = _Instructor.StreetAddress;
                 _Instruct.StreetAddress = _Instructor.StreetAddress;
 
                 _context.Update(_Instruct);
@@ -134,8 +133,6 @@ namespace SWARM.Server.Application.Instruct
                     Zip = _Instructor.Zip,
                     Phone = _Instructor.Phone
                 };
-                _Instruct.StreetAddress = _Instructor.StreetAddress;
-                _Instruct.StreetAddress = _Instructor.StreetAddress;
 
                 _context.Instructors.Add(_Instruct);
                 await _context.SaveChangesAsync();

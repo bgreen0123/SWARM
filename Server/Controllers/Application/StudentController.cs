@@ -126,11 +126,14 @@ namespace SWARM.Server.Application.Stu
                     StudentId = _Student.StudentId,
                     Salutation = _Student.Salutation,
                     FirstName = _Student.FirstName,
+                    LastName = _Student.LastName,
                     StreetAddress = _Student.StreetAddress,
                     Zip = _Student.Zip,
                     Phone = _Student.Phone,
                     Employer = _Student.Employer,
-                    RegistrationDate = _Student.RegistrationDate
+                    RegistrationDate = _Student.RegistrationDate,
+                    SchoolId = _Student.SchoolId
+                
                 };
 
                 _context.Students.Add(_Stu);
